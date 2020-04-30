@@ -21,6 +21,7 @@ class AllMemes extends React.Component {
   render() {
     return (
       <div>
+        <h1><a href="/apples">Generate a Meme</a></h1>
         {this.state.memes.map((meme) => {
           return(
             <div className="tile" key={meme.id} >

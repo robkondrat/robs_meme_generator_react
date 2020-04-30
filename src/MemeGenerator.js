@@ -21,14 +21,6 @@ class MemeGenerator extends React.Component {
   //   })
   // }
 
-  componentDidMount() {
-    axios.get('http://localhost:3001/api/memes')
-    .then(response => {
-      console.log(response)
-      this.setState({memes: response.data})
-    })
-    .catch(error => console.log(error))
-  }
 
   handleChange(event) {
     const {name, value} = event.target
@@ -47,45 +39,42 @@ class MemeGenerator extends React.Component {
   render() {
     return (
       <div>
-        {this.state.memes.map((meme) => {
-          return(
-            <div className="tile" key={meme.id} >
-              <h4>{meme.top_text}</h4>
-              <img src={meme.img} />
-              <h4>{meme.bottom_text}</h4>
-            </div>
-          )       
-        })}
+        <p><a href="/">Home</a></p>
+        <form className="meme-form" onSubmit={this.handleSubmit}>
+          <input 
+            type="text"
+            name="topText"
+            placeholder="Top Text"
+            value={this.state.topText}
+            onChange={this.handleChange}
+          />
+
+          <input 
+            type="text"
+            name="bottomText"
+            placeholder="Bottom Text"
+            value={this.state.bottomText}
+            onChange={this.handleChange}
+          />
+
+          <input 
+            type="text"
+            name="img"
+            placeholder="Image URL"
+            value={this.state.img}
+            onChange={this.handleChange}
+          />
+
+
+          <button>Gen</button>
+        </form>
+
+        <div className="meme">
+          <img src={this.state.randomImg} />
+          <h2 className="top">{this.state.topText}</h2>
+          <h2 className="bottom">{this.state.bottomText}</h2>
+        </div>
       </div>
-
-
-      // <div>
-        // <form className="meme-form" onSubmit={this.handleSubmit}>
-        //   <input 
-        //     type="text"
-        //     name="topText"
-        //     placeholder="Top Text"
-        //     value={this.state.topText}
-        //     onChange={this.handleChange}
-        //   />
-
-        //   <input 
-        //     type="text"
-        //     name="bottomText"
-        //     placeholder="Bottom Text"
-        //     value={this.state.bottomText}
-        //     onChange={this.handleChange}
-        //   />
-
-        //   <button>Gen</button>
-        // </form>
-
-        // <div className="meme">
-        //   <img src={this.state.randomImg} />
-        //   <h2 className="top">{this.state.topText}</h2>
-        //   <h2 className="bottom">{this.state.bottomText}</h2>
-        // </div>
-      // </div>
     )
   }
 }
