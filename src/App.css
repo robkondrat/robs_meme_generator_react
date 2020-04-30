@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+img {
+  width: 300px;
+}
+
+.tile {
+  height: 325px;
+  width: 325px;
+  margin: 10px;
+  background: lightyellow;
+  float: left;
+  font-size: 11px;
+  text-align: left;
+
+}
