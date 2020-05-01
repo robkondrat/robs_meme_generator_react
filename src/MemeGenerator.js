@@ -1,47 +1,72 @@
-import React from 'react'
-import axios from 'axios'
-
+import React from "react";
+import axios from "axios";
 
 class MemeGenerator extends React.Component {
   constructor() {
-    super()
+    super();
     this.state = {
-      memes: []
-    }
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
+      allMemeImgs: [],
+      randomImg: "",
+      topText: "",
+      bottomText: ""
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.saveMeme = this.saveMeme.bind(this);
   }
 
-  // componentDidMount() {
-  //   fetch("https://api.imgflip.com/get_memes")
-  //   .then(response => response.json())
-  //   .then(response => {
-  //     const {memes} = response.data
-  //     this.setState({ allMemeImgs: memes })
-  //   })
-  // }
-
+  componentDidMount() {
+    fetch("https://api.imgflip.com/get_memes")
+      .then((response) => response.json())
+      .then((response) => {
+        const { memes } = response.data;
+        this.setState({ allMemeImgs: memes });
+      });
+  }
 
   handleChange(event) {
-    const {name, value} = event.target
+    const { name, value } = event.target;
     this.setState({
       [name]: value
-    })
+    });
   }
 
   handleSubmit(event) {
-    event.preventDefault()
-    const randNum = Math.floor(Math.random() * this.state.allMemeImgs.length)
-    const randMemeImg = this.state.allMemeImgs[randNum].url
-    this.setState({randomImg: randMemeImg })
+    event.preventDefault();
+    const randNum = Math.floor(Math.random() * this.state.allMemeImgs.length);
+    const randMemeImg = this.state.allMemeImgs[randNum].url;
+    this.setState({ randomImg: randMemeImg });
+  }
+
+  saveMeme() {
+    fetch("http://localhost:3001/api/memes", {
+      method: "post",
+      body: JSON.stringify({
+        top_text: this.state.topText,
+        bottom_text: this.state.bottomText,
+        img: this.state.randomImg
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+      });
   }
 
   render() {
     return (
       <div>
-        <p><a href="/">Home</a></p>
+        <p>
+          <a href="/">Home</a>
+        </p>
+
         <form className="meme-form" onSubmit={this.handleSubmit}>
-          <input 
+          <button>Gen</button>
+          <input
             type="text"
             name="topText"
             placeholder="Top Text"
@@ -49,24 +74,13 @@ class MemeGenerator extends React.Component {
             onChange={this.handleChange}
           />
 
-          <input 
+          <input
             type="text"
             name="bottomText"
             placeholder="Bottom Text"
             value={this.state.bottomText}
             onChange={this.handleChange}
           />
-
-          <input 
-            type="text"
-            name="img"
-            placeholder="Image URL"
-            value={this.state.img}
-            onChange={this.handleChange}
-          />
-
-
-          <button>Gen</button>
         </form>
 
         <div className="meme">
@@ -74,9 +88,10 @@ class MemeGenerator extends React.Component {
           <h2 className="top">{this.state.topText}</h2>
           <h2 className="bottom">{this.state.bottomText}</h2>
         </div>
+        <button onClick={this.saveMeme}>Save</button>
       </div>
-    )
+    );
   }
 }
 
-export default MemeGenerator
+export default MemeGenerator;
